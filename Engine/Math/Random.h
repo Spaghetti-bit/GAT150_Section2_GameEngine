@@ -1,28 +1,18 @@
 #pragma once
-#include <cstdlib>
-#include <cmath>
-
 
 namespace nc
 {
-	float random() // 0.0 to 1.0
+	inline float random()
 	{
 		return rand() / static_cast<float>(RAND_MAX);
 	}
-	float random(float min, float max) // min - max
-	{
+
+	inline float random(float min, float max) 
+	{ 
 		if (min > max)
 		{
-			float temp = min;
-			min = max;
-			max = temp;
-
-			//std::swap(min, max);
-
-
+			std::swap(min, max);
 		}
-
-
-		return min + (max - min) * random();
+		return min + ((max - min) * random()); 
 	}
 }

@@ -1,28 +1,34 @@
 #include "pch.h"
 #include "Transform.h"
+#include <string>
 
 namespace nc
 {
-    std::istream& operator>>(std::istream& stream, Transform& t)
-    {
-        
-        stream >> t.position;
+	std::istream& operator >> (std::istream& stream, Transform& t)
+	{
+		stream >> t.position;
 
-        std::string line;
+		std::string line;
+		std::getline(stream, line);
+		t.scale = stof(line);
 
+		std::getline(stream, line);
+		t.angle = stof(line);
 
-        std::getline(stream, line);
-        t.scale = stof(line);
+		return stream;
+	}
 
-        std::getline(stream, line);
-        t.angle = stof(line);
+	void Transform::Update()
+	{
+		Matrix33 mxScale;
+		mxScale.Scale(scale);
 
-       /* stream >> t.scale;
-        stream >> t.angle;*/
+		Matrix33 mxRotate;
+		mxRotate.Rotate(angle);
 
-        
+		Matrix33 mxTranslate;
+		mxTranslate.Translate(position);
 
-        return stream;
-    }
-
+		matrix = mxScale * mxRotate * mxTranslate;
+	}
 }

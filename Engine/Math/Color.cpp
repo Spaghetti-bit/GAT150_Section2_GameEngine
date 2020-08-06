@@ -1,36 +1,30 @@
 #include "pch.h"
 #include "Color.h"
+#include <string>
 
 namespace nc
 {
-	std::istream& operator>>(std::istream& stream, Color& c)
+
+	inline std::istream& operator >> (std::istream& stream, Color& c)
 	{
 		std::string line;
 		std::getline(stream, line);
 
-
 		if (line.find("{") != std::string::npos)
 		{
-			// { r, g, b }
-			std::string cr = line.substr(line.find("{") + 1, line.find(",") - line.find("{") - 1); // 0
+
+			std::string cr = line.substr(line.find("{") + 1, line.find(",") - line.find("{") - 1);
 			c.r = std::stof(cr);
+			c.g = 1;
+			c.b = 1;
+			line = line.substr(line.find(",") + 1, line.find("}") - line.find(","));
 
-			line = line.substr(line.find(",") + 1, line.find("}") - line.find(",") - 1);
-
-			//std::string cg = line.substr(line.find(",") + 1, line.find("}") - line.find(",") - 1);
-
-
-			std::string cg = line.substr(0, line.find(",")); // -3
+			/*std::string cg = line.substr(0, line.find(","));
 			c.g = std::stof(cg);
 
-			std::string cb = line.substr(line.find(",") + 1, line.find("}") - line.find(",") - 1);
-			c.b = std::stof(cb);
-
+			std::string cd = line.substr(line.find(",") + 1, line.find("}") - line.find(",") - 1);
+			c.b = std::stof(cd);*/
 		}
-
-
-
 		return stream;
 	}
-
 }

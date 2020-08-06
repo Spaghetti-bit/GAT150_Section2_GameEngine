@@ -1,8 +1,8 @@
 // Main.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <iostream>
-#include "SDL.h"
+#include "pch.h"
+#include <Graphics\Texture.h>
 
 int main(int, char**)
 {
@@ -11,6 +11,8 @@ int main(int, char**)
 		std::cout << "SDL_INIT Error: " << SDL_GetError() << std::endl;
 		return 1;
 	}
+
+	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 
 	SDL_Window* window = SDL_CreateWindow("GAT150", 100, 100, 800, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
@@ -38,19 +40,15 @@ int main(int, char**)
 	memset(pixels, 128, width * height * sizeof(Uint32));
 	SDL_UpdateTexture(texture1, NULL, pixels, width * sizeof(Uint32));
 
+	nc::Texture texture;
+	texture.Create("sf2.png", renderer);
+	float angle{ 0.0f };
 
 
 
 
-	SDL_Surface* surface = SDL_LoadBMP("sf2.bmp"); // loads sf2.bmp from Build
-	if (surface == nullptr)
-	{
-		std::cout << "Error: " << SDL_GetError() << std::endl;
-		SDL_Quit();
-		return 1;
-	}
-	SDL_Texture* texture2 = SDL_CreateTextureFromSurface(renderer, surface);
 
+	
 
 	SDL_Event event;
 	bool quit{ false };
@@ -66,7 +64,7 @@ int main(int, char**)
 			break;
 		}
 
-
+	
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 		SDL_RenderClear(renderer);
@@ -91,17 +89,18 @@ int main(int, char**)
 		SDL_Rect rect2;
 		rect2.x = 20;
 		rect2.y = 20;
-		SDL_QueryTexture(texture2, NULL, NULL, &rect2.w, &rect2.h);
-		SDL_RenderCopy(renderer, texture2, NULL, &rect2);
 
-
-
+		texture.Draw({ 0, 0 }, { 1, 1 }, angle);
+		angle += .5f;
 
 		SDL_RenderPresent(renderer);
+
+		
 	}
 	
 
 	SDL_Quit();
+	IMG_Quit();
 	delete pixels;
 
 	return 0;

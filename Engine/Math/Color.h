@@ -6,10 +6,10 @@ namespace nc
 {
 	struct Color
 	{
-		float r, g, b;
+		float r, g, b, a;
 
 		Color() : r{ 0 }, g{ 0 }, b{ 0 } {};
-		Color(float r, float g, float b) : r{ r }, g{ g }, b{ b } {};
+		Color(float r, float g, float b, float a = 1.0f) : r{ r }, g{ g }, b{ b }, a{ a } {};
 
 		float& operator [] (size_t index) { return (&r)[index]; }
 		const float& operator [] (size_t index) const { return (&r)[index]; }
@@ -53,21 +53,22 @@ namespace nc
 
 		Color operator - () { return *this * -1.0f; };
 
-		COLORREF Pack888() const;
+		SDL_Color Pack888() const;
+		operator SDL_Color() const { return Pack888(); }
 
-		operator COLORREF() const { return Pack888(); };
-
-
+		
 
 	};
 
 
-	inline COLORREF Color::Pack888() const
+	inline SDL_Color Color::Pack888() const
 	{
-		BYTE _r = static_cast<BYTE>(r * 255.0f);
-		BYTE _g = static_cast<BYTE>(g * 255.0f);
-		BYTE _b = static_cast<BYTE>(b * 255.0f);
+		SDL_Color color;
+		color.r = static_cast<BYTE>(r * 255.0f);
+		color.g = static_cast<BYTE>(g * 255.0f);
+		color.b = static_cast<BYTE>(b * 255.0f);
+		color.a = static_cast<BYTE>(a * 255.0f);
 
-		return (_r) | (_g << 8) | (_b << 16); // RGB()
+		return color;
 	}
 }
