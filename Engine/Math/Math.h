@@ -21,7 +21,7 @@ namespace nc
 		}
 
 		template <>
-		inline ky::Vector2 Clamp<ky::Vector2>(ky::Vector2 v, ky::Vector2 min, ky::Vector2 max)
+		inline nc::Vector2 Clamp<nc::Vector2>(nc::Vector2 v, nc::Vector2 min, nc::Vector2 max)
 		{
 			v.x = Clamp(v.x, min.x, max.x);
 			v.y = Clamp(v.y, min.y, max.y);
