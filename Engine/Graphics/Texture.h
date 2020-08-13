@@ -1,4 +1,5 @@
 #pragma once
+#include "Texture.h"
 #include "Math/Vector2.h"
 #include "Resources/Resource.h"
 #include <SDL.h>
@@ -15,6 +16,7 @@ namespace nc
 		void Destroy() override;
 
 		void Draw(const Vector2& position, const Vector2& scale, float angle);
+		void Draw(const SDL_Rect source, const Vector2& position, const Vector2& scale, float angle);
 		Vector2 GetSize();
 
 

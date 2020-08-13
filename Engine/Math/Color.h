@@ -1,6 +1,8 @@
 #pragma once
 
 #include <windows.h>
+#include <istream>
+#include <SDL.h>
 
 namespace nc
 {
@@ -8,7 +10,7 @@ namespace nc
 	{
 		float r, g, b, a;
 
-		Color() : r{ 0 }, g{ 0 }, b{ 0 } {};
+		Color() : r{ 0 }, g{ 0 }, b{ 0 }{};
 		Color(float r, float g, float b, float a = 1.0f) : r{ r }, g{ g }, b{ b }, a{ a } {};
 
 		float& operator [] (size_t index) { return (&r)[index]; }
@@ -48,12 +50,18 @@ namespace nc
 
 
 		friend std::istream& operator >> (std::istream& stream, Color& c);
+		friend std::ostream& operator << (std::ostream& stream, Color& c)
+		{
+			stream << c.r << " " << c.g << " " << c.b << " " << c.a;
 
+			return stream;
+		}
 
 
 		Color operator - () { return *this * -1.0f; };
 
 		SDL_Color Pack888() const;
+
 		operator SDL_Color() const { return Pack888(); }
 
 		

@@ -33,8 +33,8 @@ namespace nc
 
 
 	protected:
-		Uint8* m_keystate;
-		Uint8* m_prevKeystate;
-		int m_numKeys;
+		Uint8* m_keystate{ nullptr };
+		Uint8* m_prevKeystate{ nullptr };
+		int m_numKeys{ NULL };
 	};
 }
