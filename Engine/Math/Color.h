@@ -50,12 +50,7 @@ namespace nc
 
 
 		friend std::istream& operator >> (std::istream& stream, Color& c);
-		friend std::ostream& operator << (std::ostream& stream, Color& c)
-		{
-			stream << c.r << " " << c.g << " " << c.b << " " << c.a;
-
-			return stream;
-		}
+		friend std::ostream& operator << (std::ostream& stream, Color& c);
 
 
 		Color operator - () { return *this * -1.0f; };

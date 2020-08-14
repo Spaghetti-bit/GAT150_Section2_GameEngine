@@ -18,6 +18,13 @@ namespace nc
         RemoveAllComponents();
     }
 
+    void GameObject::Read(const rapidjson::Value& value)
+    {
+        nc::json::Get(value, "position", m_transform.position);
+        nc::json::Get(value, "angle", m_transform.angle);
+        nc::json::Get(value, "scale", m_transform.scale);
+    }
+
 
     void GameObject::Update()
     {

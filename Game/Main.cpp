@@ -12,52 +12,34 @@ nc::GameObject player;
 
 int main(int, char**)
 {
+	
+
 	rapidjson::Document document;
-	nc::json::Load("json.txt", document);
-
-	std::string str;
-	nc::json::Get(document, "string", str);
-	std::cout << str << std::endl;
-
-	bool b;
-	nc::json::Get(document, "bool", b);
-	std::cout << b << std::endl;
-
-	int i1;
-	nc::json::Get(document, "integer1", i1);
-	std::cout << i1 << std::endl;
-
-	int i2;
-	nc::json::Get(document, "integer2", i2);
-	std::cout << i2 << std::endl;
-
-	float f;
-	nc::json::Get(document, "float", f);
-	std::cout << f << std::endl;
-
-	nc::Vector2 v2;
-	nc::json::Get(document, "vector2", v2);
-	std::cout << v2 << std::endl;
-
-	nc::Color color;
-	nc::json::Get(document, "color", color);
-	std::cout << color << std::endl;
-
-
 
 
 	engine.Startup();
 
 	player.Create(&engine);
+	nc::json::Load("player.txt", document);
+	player.Read(document);
+
+	//PhysicsC
 	nc::Component* component = new nc::PhysicsComponent;
-	player.m_transform.position = { 400, 300 };
+	//player.m_transform.position = { 400, 300 };
 	player.AddComponent(component);
 	component->Create();
 
+
+	//SpriteC
 	component = new nc::SpriteComponent;
 	player.AddComponent(component);
+
+
+	nc::json::Load("sprite.txt", document);
+	component->Read(document);
 	component->Create();
 
+	// PlayerC
 	component = new nc::PlayerComponent;
 	player.AddComponent(component);
 	component->Create();
@@ -98,3 +80,34 @@ int main(int, char**)
 
 	return 0;
 }
+
+
+//nc::json::Load("json.txt", document);
+//
+//std::string str;
+//nc::json::Get(document, "string", str);
+//std::cout << str << std::endl;
+//
+//bool b;
+//nc::json::Get(document, "bool", b);
+//std::cout << b << std::endl;
+//
+//int i1;
+//nc::json::Get(document, "integer1", i1);
+//std::cout << i1 << std::endl;
+//
+//int i2;
+//nc::json::Get(document, "integer2", i2);
+//std::cout << i2 << std::endl;
+//
+//float f;
+//nc::json::Get(document, "float", f);
+//std::cout << f << std::endl;
+//
+//nc::Vector2 v2;
+//nc::json::Get(document, "vector2", v2);
+//std::cout << v2 << std::endl;
+//
+//nc::Color color;
+//nc::json::Get(document, "color", color);
+//std::cout << color << std::endl;

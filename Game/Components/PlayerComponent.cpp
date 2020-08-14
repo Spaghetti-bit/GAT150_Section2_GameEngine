@@ -22,7 +22,7 @@ namespace nc
 		{
 
 
-			force = nc::Vector2::forward * 1500.0f;
+			force = nc::Vector2::forward * 500.0f;// * m_owner->m_engine->GetTimer().DeltaTime();
 		}
 		if (m_owner->m_engine->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_S) == nc::InputSystem::eButtonState::HELD)
 		{

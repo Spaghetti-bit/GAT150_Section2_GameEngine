@@ -38,12 +38,7 @@ namespace nc
 		Vector2& operator /= (float s) { x /= s; y /= s; return *this; }
 
 		friend std::istream& operator >> (std::istream& stream, Vector2& v);
-		friend std::ostream& operator << (std::ostream& stream, Vector2& v)
-		{
-			stream << v.x << " " << v.y;
-
-			return stream;
-		}
+		friend std::ostream& operator << (std::ostream& stream, Vector2& v);
 
 
 		float Length() const;
