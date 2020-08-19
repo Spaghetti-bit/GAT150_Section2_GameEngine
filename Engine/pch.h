@@ -12,22 +12,23 @@
 #include "Core/Assert.h"
 
 #include "Math/Math.h"
+#include "Math/Color.h"
 #include "Math/Random.h"
 #include "Math/Transform.h"
-#include "Math/Color.h"
 
 
 #include <SDL.h>
 #include <SDL_image.h>
 
-#include <iostream>
+#include <cassert>
+#include <chrono>
+#include <functional>
 #include <fstream>
-#include <string>
-#include <vector>
+#include <iostream>
 #include <list>
 #include <map>
-#include <chrono>
-#include <cassert>
+#include <string>
+#include <vector>
 
 
 #endif //PCH_H

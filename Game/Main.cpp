@@ -1,48 +1,57 @@
 #include "pch.h"
-#include "Components/PhysicsComponent.h"
-#include "Components/SpriteComponent.h"
 #include "Graphics/Texture.h"
-#include "Objects/GameObject.h"
 #include "Engine.h"
-#include "Components/PlayerComponent.h"
 #include "Core/Json.h"
+#include "Objects/ObjectFactory.h"
+#include "Components/PlayerComponent.h"
+#include "Objects/Scene.h"
 
+nc::Scene scene;
 nc::Engine engine;
-nc::GameObject player;
 
 int main(int, char**)
 {
+	engine.Startup();
+	scene.Create(&engine);
+
+	nc::ObjectFactory::Instance().Initialize();
+	nc::ObjectFactory::Instance().Register("PlayerComponent", nc::Object::Instantiate<nc::PlayerComponent>);
 	
 
+	
 	rapidjson::Document document;
+	nc::json::Load("scene.txt", document);
+	scene.Read(document);
+	//nc::GameObject* player = nc::ObjectFactory::Instance().Create<nc::GameObject>("GameObject");
+
+	//player->Create(&engine);
+
+	////rapidjson::Document document;
+	//nc::json::Load("player.txt", document);
+	//player->Read(document);
+
+	//nc::Component* component;
 
 
-	engine.Startup();
-
-	player.Create(&engine);
-	nc::json::Load("player.txt", document);
-	player.Read(document);
-
-	//PhysicsC
-	nc::Component* component = new nc::PhysicsComponent;
-	//player.m_transform.position = { 400, 300 };
-	player.AddComponent(component);
-	component->Create();
+	////PhysicsC
+	//component = nc::ObjectFactory::Instance().Create<nc::Component>("PhysicsComponent");
+	//component->Create(player);
+	//player->AddComponent(component);
 
 
-	//SpriteC
-	component = new nc::SpriteComponent;
-	player.AddComponent(component);
+	////SpriteC
+	//component = nc::ObjectFactory::Instance().Create<nc::Component>("SpriteComponent");
+	//nc::json::Load("sprite.txt", document);
+	//component->Create(player);
+	//component->Read(document);
+	//player->AddComponent(component);
 
 
-	nc::json::Load("sprite.txt", document);
-	component->Read(document);
-	component->Create();
 
-	// PlayerC
-	component = new nc::PlayerComponent;
-	player.AddComponent(component);
-	component->Create();
+	//// PlayerC
+	//component = nc::ObjectFactory::Instance().Create<nc::Component>("PlayerComponent");
+	//component->Create(player);
+	//player->AddComponent(component);
 
 
 
@@ -69,13 +78,22 @@ int main(int, char**)
 
 		//update
 		engine.Update();
-		player.Update();
+		scene.Update();
+		//player->Update();
+		
+		
+		
 		engine.GetSystem<nc::Renderer>()->BeginFrame();
+		
+		
 		background->Draw({ 0, 0 }, { 1, 1 }, 0);
-		player.Draw();
+		scene.Draw();
+		
+		
 		engine.GetSystem<nc::Renderer>()->EndFrame();
 	}
 
+	scene.Destroy();
 	engine.Shutdown();
 
 	return 0;

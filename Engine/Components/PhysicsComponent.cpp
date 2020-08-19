@@ -6,6 +6,8 @@ namespace nc
 {
     bool PhysicsComponent::Create(void* data)
     {
+        m_owner = static_cast<GameObject*>(data);
+        m_dampening = 0.98f;
         return true;
     }
 
