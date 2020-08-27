@@ -11,8 +11,10 @@ namespace nc
 		virtual bool Create(void* data = nullptr) override;
 		virtual void Destroy() override;
 		virtual void Update() override;
+		virtual Object* Clone() override { return  new PhysicsComponent{ *this }; }
 
-		void ApplyForce(const Vector2& force) { m_force = force; }
+
+		virtual void SetForce(const Vector2& force) { m_force = force; }
 
 
 		

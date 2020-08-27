@@ -21,34 +21,102 @@ namespace nc
 
 	void Scene::Read(const rapidjson::Value& value)
 	{
-		const rapidjson::Value& objectValue = value["GameObject"];
-		if (objectValue.IsObject())
+		if (value.HasMember("Prototypes"))
 		{
-			std::string typeName;
-			// read component “type” name from json (Get)
-			json::Get(objectValue, "type", typeName);
-
-			// get from object factory, use typeName as the key
-			GameObject* gameObject = ObjectFactory::Instance().Create<GameObject>(typeName);
-
-			if (gameObject)
+			const rapidjson::Value& objectsValue = value["Prototypes"];
+			if (objectsValue.IsArray())
 			{
-				gameObject->Create(m_engine);
-				// call game object read (pass in objectValue)
-				gameObject->Read(objectValue);
-				// call AddGameObject passing in the game object
-				AddGameObject(gameObject);
+				ReadPrototypes(objectsValue);
+			}
+		}
+
+		if (value.HasMember("GameObjects"))
+		{
+			const rapidjson::Value& objectsValue = value["GameObjects"];
+			if (objectsValue.IsArray())
+			{
+				ReadGameObjects(objectsValue);
+			}
+		}
+
+	}
+
+	void Scene::ReadGameObjects(const rapidjson::Value& value)
+	{
+		for (rapidjson::SizeType i = 0; i < value.Size(); i++)
+		{
+			const rapidjson::Value& objectValue = value[i];
+			if (objectValue.IsObject())
+			{
+				std::string typeName;
+				// read component “type” name from json (Get)
+				json::Get(objectValue, "type", typeName);
+
+				// get from object factory, use typeName as the key
+				GameObject* gameObject = ObjectFactory::Instance().Create<GameObject>(typeName);
+
+				if (gameObject)
+				{
+					gameObject->Create(m_engine);
+					// call game object read (pass in objectValue)
+					gameObject->Read(objectValue);
+					// call AddGameObject passing in the game object
+					AddGameObject(gameObject);
+				}
 			}
 		}
 	}
 
+	void Scene::ReadPrototypes(const rapidjson::Value& value)
+	{
+		for (rapidjson::SizeType i = 0; i < value.Size(); i++)
+		{
+			const rapidjson::Value& objectValue = value[i];
+			if (objectValue.IsObject())
+			{
+				std::string typeName;
+				// read component “type” name from json (Get)
+				json::Get(objectValue, "type", typeName);
+
+				// get from object factory, use typeName as the key
+				GameObject* gameObject = ObjectFactory::Instance().Create<GameObject>(typeName);
+
+				if (gameObject)
+				{
+					gameObject->Create(m_engine);
+					// call game object read (pass in objectValue)
+					gameObject->Read(objectValue);
+
+					std::cout << gameObject->m_name << std::endl;
+
+					ObjectFactory::Instance().Register(gameObject->m_name, new Prototype<Object>(gameObject));
+
+
+					// call AddGameObject passing in the game object
+					//AddGameObject(gameObject);
+				}
+			}
+		}
+	}
+
+
 	void Scene::Update()
 	{
-		// iterate through the actors and call Update on each actor
-		for (GameObject* gameObject : m_gameObjects)
+		for (auto gameObject : m_gameObjects)
 		{
-			// update
 			gameObject->Update();
+		}
+
+		auto iter = m_gameObjects.begin();
+		while (iter != m_gameObjects.end())
+		{
+			if ((*iter)->m_flags[GameObject::eFlags::DESTROY])
+			{
+				(*iter)->Destroy();
+				delete (*iter);
+				iter = m_gameObjects.erase(iter);
+			}
+			else iter++;
 		}
 	}
 
@@ -73,6 +141,20 @@ namespace nc
 		}
 
 		return nullptr;
+	}
+
+	std::vector<GameObject*> Scene::FindByTag(const std::string& tag)
+	{
+		std::vector<GameObject*> gameObjects;
+		for (auto gameObject : m_gameObjects)
+		{
+			if (gameObject->m_tag == tag)
+			{
+				gameObjects.push_back(gameObject);
+			}
+		}
+
+		return gameObjects;
 	}
 
 	void Scene::AddGameObject(GameObject* gameObject)

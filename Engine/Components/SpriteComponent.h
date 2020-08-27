@@ -9,6 +9,8 @@ namespace nc
 	public:
 		virtual bool Create(void* data = nullptr) override;
 		virtual void Destroy() override;
+		virtual Object* Clone() override { return  new SpriteComponent{ *this }; }
+
 
 		void Read(const rapidjson::Value& value);
 
@@ -19,6 +21,7 @@ namespace nc
 
 	protected: 
 		std::string m_textureName;
+		Vector2 m_origin;
 		SDL_Rect m_rect{ 0, 0, 0, 0 };
 	};
 }

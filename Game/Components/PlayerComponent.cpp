@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "PlayerComponent.h"
 #include "Components/PhysicsComponent.h"
+#include "Components\RigidBodyComponent.h"
+#include <Components\AudioComponent.h>
 
 namespace nc
 {
@@ -19,33 +21,32 @@ namespace nc
     {
 		//Player Controller	
 		nc::Vector2 force{ 0, 0 };
-		
-		if (m_owner->m_engine->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_W) == nc::InputSystem::eButtonState::HELD)
-		{
-
-
-			force = nc::Vector2::forward * 500.0f;// * m_owner->m_engine->GetTimer().DeltaTime();
-		}
-		if (m_owner->m_engine->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_S) == nc::InputSystem::eButtonState::HELD)
-		{
-			m_owner->m_transform.position.y += 200.0f * m_owner->m_engine->GetTimer().DeltaTime();
-		}
 		if (m_owner->m_engine->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_A) == nc::InputSystem::eButtonState::HELD)
 		{
-			m_owner->m_transform.angle -= 90.0f * m_owner->m_engine->GetTimer().DeltaTime();
+			force.x = -200000;
 		}
 		if (m_owner->m_engine->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_D) == nc::InputSystem::eButtonState::HELD)
 		{
-			m_owner->m_transform.angle += 90.0f * m_owner->m_engine->GetTimer().DeltaTime();
+			force.x = 200000;
 		}
+		if (m_owner->m_engine->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_SPACE) == nc::InputSystem::eButtonState::PRESSED)
+		{
+			force.y = -400000;
+			AudioComponent* audioComponent = m_owner->GetComponent<AudioComponent>();
+			if (audioComponent)
+			{
+				audioComponent->Play();
+			}
+		}
+
 		force = nc::Vector2::Rotate(force, nc::math::DegreesToRadians(m_owner->m_transform.angle));
 
 
-		PhysicsComponent* pComponent = m_owner->GetComponent<PhysicsComponent>();
+		PhysicsComponent* pComponent = m_owner->GetComponent<RigidBodyComponent>();
 
 		if (pComponent)
 		{
-			pComponent->ApplyForce(force);
+			pComponent->SetForce(force);
 		}
 
     }

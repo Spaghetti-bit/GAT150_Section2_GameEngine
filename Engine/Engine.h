@@ -4,6 +4,8 @@
 #include "Graphics/Renderer.h"
 #include "Input/InputSystem.h"
 #include "Resources/ResourceManager.h"
+#include "Physics/PhysicsSystem.h"
+#include "Audio/AudioSystem.h"
 
 #include <vector>
 
