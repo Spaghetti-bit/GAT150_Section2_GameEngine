@@ -19,19 +19,23 @@ namespace nc
 
     void PlayerComponent::Update()
     {
+		auto contacts = m_owner->GetContactWithTag("Floor");
+		bool onGround = !contacts.empty();
+
+
 		//Player Controller	
 		nc::Vector2 force{ 0, 0 };
 		if (m_owner->m_engine->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_A) == nc::InputSystem::eButtonState::HELD)
 		{
-			force.x = -200000;
+			force.x = -300;
 		}
 		if (m_owner->m_engine->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_D) == nc::InputSystem::eButtonState::HELD)
 		{
-			force.x = 200000;
+			force.x = 300;
 		}
-		if (m_owner->m_engine->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_SPACE) == nc::InputSystem::eButtonState::PRESSED)
+		if (onGround && m_owner->m_engine->GetSystem<nc::InputSystem>()->GetButtonState(SDL_SCANCODE_SPACE) == nc::InputSystem::eButtonState::PRESSED)
 		{
-			force.y = -400000;
+			force.y = -1200;
 			AudioComponent* audioComponent = m_owner->GetComponent<AudioComponent>();
 			if (audioComponent)
 			{
@@ -46,9 +50,15 @@ namespace nc
 
 		if (pComponent)
 		{
-			pComponent->SetForce(force);
+			pComponent->ApplyForce(force);
 		}
 
+
+		auto coinContacts = m_owner->GetContactWithTag("Coin");
+		for (GameObject* contact : coinContacts)
+		{
+			contact->m_flags[GameObject::eFlags::DESTROY] = true;
+		}
     }
 
 }

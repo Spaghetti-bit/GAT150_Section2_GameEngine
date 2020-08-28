@@ -5,6 +5,7 @@
 #include "Objects/ObjectFactory.h"
 #include "Components/PlayerComponent.h"
 #include "Objects/Scene.h"
+#include "TileMap.h"
 
 nc::Scene scene;
 nc::Engine engine;
@@ -21,16 +22,24 @@ int main(int, char**)
 	nc::json::Load("scene.txt", document);
 	scene.Read(document);
 
-	for (size_t i = 0; i < 10; i++)
-	{
-		nc::GameObject* gameObject = nc::ObjectFactory::Instance().Create<nc::GameObject>("ProtoBox");
-		if (gameObject)
-		{
-			gameObject->m_transform.position = nc::Vector2{ nc::random(0, 800), nc::random(0,200) };
-			gameObject->m_transform.angle = nc::random(0, 360);
-			scene.AddGameObject(gameObject);
-		}
-	}
+	nc::TileMap tileMap;
+	nc::json::Load("tileMap.txt", document);
+	tileMap.Read(document);
+	tileMap.Create(&scene);
+
+
+	//for (size_t i = 0; i < 100; i++)
+	//{
+	//	nc::GameObject* gameObject = nc::ObjectFactory::Instance().Create<nc::GameObject>("ProtoCoin");
+	//	if (gameObject)
+	//	{
+	//		gameObject->m_transform.position = nc::Vector2{ nc::random(0, 800), nc::random(200,300) };
+	//		//gameObject->m_transform.angle = nc::random(0, 360);
+	//		scene.AddGameObject(gameObject);
+	//	}
+	//}
+
+
 
 	SDL_Event event;
 	bool quit = false;

@@ -14,8 +14,8 @@ namespace nc
 		virtual Object* Clone() override { return  new PhysicsComponent{ *this }; }
 
 
-		virtual void SetForce(const Vector2& force) { m_force = force; }
-
+		virtual void ApplyForce(const Vector2& force) { m_force = force; }
+		virtual Vector2& GetVelocity() { return m_velocity; }
 
 		
 
